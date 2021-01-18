@@ -11,7 +11,7 @@ import {
     CardMedia,
     CardContent,
     Container,
-    Typography,
+    Snackbar,
 } from "@material-ui/core";
 import {TextField} from "@material-ui/core";
 import {fetchMovies} from '../actions/movieActions'
@@ -20,9 +20,10 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 
 const MovieGridList = (props : any) => {
+    // @ts-ignore
     return (
         <Box display={'flex'} width={'100%'}>
-            <Box width={'80%'} style={{backgroundColor: "grey", height: window.innerHeight}}>
+            <Box width={'80%'} style={{backgroundColor: "grey", height: window.innerHeight, overflow: 'auto'}}>
                 <TextField
                     label="The Shoppies"
                     placeholder="Search"
@@ -59,7 +60,7 @@ const MovieGridList = (props : any) => {
                                 title={props.movieList[movieId].Title}
                                 subtitle={props.movieList[movieId].Year}
                                 actionIcon={
-                                    <IconButton aria-label={'Nominate'} color={'primary'} onClick={ () => props.nominateMovie({[movieId]: props.movieList[movieId]})}>
+                                    <IconButton disabled={movieId in props.selectedList} color={'primary'} onClick={ () => props.nominateMovie({[movieId]: props.movieList[movieId]})}>
                                         <AddCircleIcon/>
                                     </IconButton>
                                 }
@@ -68,7 +69,7 @@ const MovieGridList = (props : any) => {
                     ))}
                 </GridList>
             </Box>
-            <Box width={'20%'} style={{backgroundColor: "darkgray", height: window.innerHeight}}>
+            <Box width={'20%'} style={{backgroundColor: "darkgray", height: window.innerHeight, overflow: 'auto'}}>
             <Container>
             <GridList cellHeight={150} cols={1}>
                     <GridListTile key="Subheader" cols={1} style={{ height: 'auto' }}>
@@ -99,6 +100,14 @@ const MovieGridList = (props : any) => {
                 </GridList>
             </Container>
             </Box>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                open={Object.keys(props.selectedList).length > 4}
+                message="Successfully selected 5 titles"
+            />
         </Box>
     )
 }

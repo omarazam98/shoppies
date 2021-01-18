@@ -1,5 +1,12 @@
 
-const movieReducer = (state = { list: [], selected: []}, action: any) => {
+let intialState = { list: [], selected: []}
+if(localStorage.getItem('state') !== null){
+    intialState = JSON.parse(localStorage.getItem('state') as string)
+}
+
+const movieReducer = (state = intialState, action: any) => {
+    localStorage.setItem('state', JSON.stringify(state));
+    console.log(localStorage.getItem('state'))
     switch (action.type){
         case 'FETCH_MOVIES' :
             if(action.payload.Search){
